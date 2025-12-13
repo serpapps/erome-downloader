@@ -544,6 +544,8 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 **Algorithm**:
 
 ```python
+from urllib.parse import urlparse
+
 def extract_video_urls(album_url):
     """
     Extract all video URLs from an Erome album page.
@@ -554,9 +556,14 @@ def extract_video_urls(album_url):
     Returns:
         List of video URLs
     """
-    # Step 1: Validate input
-    if not album_url.startswith('https://www.erome.com/a/'):
-        raise ValueError('Invalid Erome album URL')
+    # Step 1: Validate input URL to prevent SSRF vulnerabilities
+    parsed = urlparse(album_url)
+    if parsed.scheme != 'https':
+        raise ValueError('URL must use HTTPS')
+    if parsed.netloc != 'www.erome.com':
+        raise ValueError('URL must be from www.erome.com')
+    if not parsed.path.startswith('/a/'):
+        raise ValueError('URL must be an album page (/a/...)')
     
     # Step 2: Fetch page content (using global USER_AGENT constant)
     response = requests.get(album_url, headers={'User-Agent': USER_AGENT})
@@ -1526,6 +1533,7 @@ Download file in segments for better performance:
 ```python
 import requests
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
 def download_segment(url, start, end, output_file, segment_num):
     """Download a specific byte range."""
@@ -1559,9 +1567,10 @@ def segmented_download(url, output_file, num_segments=4):
     # Merge segments
     with open(output_file, 'wb') as outfile:
         for i in range(num_segments):
-            with open(f'{output_file}.part{i}', 'rb') as infile:
+            part_file = Path(f'{output_file}.part{i}')
+            with open(part_file, 'rb') as infile:
                 outfile.write(infile.read())
-            os.remove(f'{output_file}.part{i}')
+            part_file.unlink()  # Delete part file using pathlib
 ```
 
 ### 11.3 Caching
@@ -1977,6 +1986,8 @@ pip install requests beautifulsoup4 lxml aiohttp yt-dlp
 1. Manually navigate to actual Erome album pages
 2. Extract real video URLs using the methods described in this document
 3. Test with those extracted URLs
+
+**IMPORTANT**: Before testing any extraction or download methods, review the [Legal and Ethical Considerations](#legal-and-ethical-considerations) section. Ensure your testing complies with all applicable laws, terms of service, and respects content creators' rights.
 
 **Example URL Pattern Templates**:
 ```
