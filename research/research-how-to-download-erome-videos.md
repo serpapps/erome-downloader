@@ -11,6 +11,24 @@ This document provides a comprehensive technical analysis of Erome's video deliv
 
 This research aims to guide developers in implementing robust video detection, inspection, and download mechanisms using industry-standard tools such as yt-dlp, ffmpeg, and alternative solutions. We analyze the platform's architecture, identify URL patterns, document streaming formats, and provide specific implementation strategies.
 
+### Intended Audience
+
+This document is intended for:
+- **Software Developers**: Building video download tools and applications
+- **Technical Researchers**: Analyzing video platform architectures
+- **System Administrators**: Understanding CDN patterns and video delivery systems
+- **Open Source Contributors**: Contributing to video download projects
+
+### Legal and Ethical Considerations
+
+**IMPORTANT**: Users of this research must comply with:
+- Terms of Service of the platform
+- Applicable copyright laws and intellectual property rights
+- Local, national, and international laws regarding content downloading
+- Respect for content creators' rights and wishes
+
+This research is provided for educational and technical analysis purposes. Downloading copyrighted content without permission may be illegal in your jurisdiction. Users are responsible for ensuring their use complies with all applicable laws and terms of service.
+
 ---
 
 ## Table of Contents
@@ -517,6 +535,12 @@ The recommended approach involves two stages:
 
 ### 7.2 URL Extraction Strategy
 
+**Standard User-Agent String**:
+```python
+# Use this standard User-Agent throughout examples
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+```
+
 **Algorithm**:
 
 ```python
@@ -530,8 +554,13 @@ def extract_video_urls(album_url):
     Returns:
         List of video URLs
     """
-    # Step 1: Fetch page content
-    response = requests.get(album_url, headers={'User-Agent': 'Mozilla/5.0...'})
+    # Step 1: Validate input
+    if not album_url.startswith('https://www.erome.com/a/'):
+        raise ValueError('Invalid Erome album URL')
+    
+    # Step 2: Fetch page content
+    USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    response = requests.get(album_url, headers={'User-Agent': USER_AGENT})
     html_content = response.text
     
     # Step 2: Parse HTML
@@ -748,7 +777,7 @@ yt-dlp "{VIDEO_URL}" \
 ```bash
 # Create urls.txt with one URL per line
 yt-dlp -a urls.txt \
-  --user-agent "Mozilla/5.0..." \
+  --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
   --referer "https://www.erome.com/"
 ```
 
@@ -868,7 +897,7 @@ ffmpeg -i "https://v11.erome.com/path/to/video.mp4" \
 
 **With custom headers**:
 ```bash
-ffmpeg -user_agent "Mozilla/5.0..." \
+ffmpeg -user_agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
   -headers "Referer: https://www.erome.com/"$'\r\n' \
   -i "https://v11.erome.com/path/to/video.mp4" \
   -c copy output.mp4
@@ -976,7 +1005,7 @@ wget "https://v11.erome.com/path/to/video.mp4" \
 
 ```bash
 wget -c "https://v11.erome.com/path/to/video.mp4" \
-  --user-agent="Mozilla/5.0..." \
+  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
   -O video.mp4
 ```
 
@@ -985,7 +1014,7 @@ wget -c "https://v11.erome.com/path/to/video.mp4" \
 ```bash
 # Create urls.txt with one URL per line
 wget -i urls.txt \
-  --user-agent="Mozilla/5.0..." \
+  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
   --referer="https://www.erome.com/" \
   --wait=2 \
   --random-wait
@@ -1015,7 +1044,7 @@ curl -L "https://v11.erome.com/path/to/video.mp4" \
 
 ```bash
 curl -C - "https://v11.erome.com/path/to/video.mp4" \
-  -H "User-Agent: Mozilla/5.0..." \
+  -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
   -o video.mp4
 ```
 
@@ -1024,7 +1053,7 @@ curl -C - "https://v11.erome.com/path/to/video.mp4" \
 ```bash
 # Download multiple files in parallel
 cat urls.txt | xargs -P 4 -I {} curl -L "{}" \
-  -H "User-Agent: Mozilla/5.0..." \
+  -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
   -O
 ```
 
@@ -1053,7 +1082,7 @@ brew install aria2
 
 ```bash
 aria2c "https://v11.erome.com/path/to/video.mp4" \
-  --user-agent="Mozilla/5.0..." \
+  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
   --referer="https://www.erome.com/" \
   -o video.mp4
 ```
@@ -1062,7 +1091,7 @@ aria2c "https://v11.erome.com/path/to/video.mp4" \
 
 ```bash
 aria2c -x 16 -s 16 "https://v11.erome.com/path/to/video.mp4" \
-  --user-agent="Mozilla/5.0..." \
+  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
   -o video.mp4
 ```
 
@@ -1074,7 +1103,7 @@ Where:
 
 ```bash
 aria2c -i urls.txt \
-  --user-agent="Mozilla/5.0..." \
+  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
   --referer="https://www.erome.com/" \
   -j 4
 ```
@@ -1501,7 +1530,7 @@ def download_segment(url, start, end, output_file, segment_num):
     """Download a specific byte range."""
     headers = {
         'Range': f'bytes={start}-{end}',
-        'User-Agent': 'Mozilla/5.0...'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     }
     response = requests.get(url, headers=headers)
     
@@ -1885,21 +1914,21 @@ if __name__ == '__main__':
 **Primary**: yt-dlp
 ```bash
 yt-dlp "https://www.erome.com/a/ALBUM_ID" \
-  --user-agent "Mozilla/5.0..." \
+  --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
   --referer "https://www.erome.com/"
 ```
 
 **Backup**: aria2c
 ```bash
 aria2c -x 16 "{VIDEO_URL}" \
-  --user-agent="Mozilla/5.0..." \
+  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
   --referer="https://www.erome.com/"
 ```
 
 **Alternative**: wget with resume support
 ```bash
 wget -c "{VIDEO_URL}" \
-  --user-agent="Mozilla/5.0..." \
+  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
   --referer="https://www.erome.com/"
 ```
 
@@ -1943,13 +1972,19 @@ pip install requests beautifulsoup4 lxml aiohttp yt-dlp
 
 ### 13.6 Testing Resources
 
-For testing implementations:
+**Note on Test URLs**: The following are example URL patterns only for illustration purposes. They are NOT actual working endpoints. For real testing, you must:
+1. Manually navigate to actual Erome album pages
+2. Extract real video URLs using the methods described in this document
+3. Test with those extracted URLs
 
-```bash
-# Test video URLs (examples - replace with actual URLs)
-https://v11.erome.com/test/sample_720p.mp4
-https://v12.erome.com/test/sample_1080p.mp4
+**Example URL Pattern Templates**:
 ```
+https://v{CDN_NUMBER}.erome.com/{PATH}/{FILENAME}.mp4
+https://v11.erome.com/2024/12/10/example_720p.mp4  (template example)
+https://v12.erome.com/al/xyz123/video_1080p.mp4   (template example)
+```
+
+These patterns are for understanding the URL structure only. Real URLs must be obtained from actual album pages.
 
 ### 13.7 Community Resources
 
