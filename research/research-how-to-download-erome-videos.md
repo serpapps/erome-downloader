@@ -544,7 +544,9 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 **Algorithm**:
 
 ```python
+import requests
 from urllib.parse import urlparse
+from bs4 import BeautifulSoup
 
 def extract_video_urls(album_url):
     """
@@ -570,7 +572,6 @@ def extract_video_urls(album_url):
     html_content = response.text
     
     # Step 3: Parse HTML
-    from bs4 import BeautifulSoup
     soup = BeautifulSoup(html_content, 'html.parser')
     
     video_urls = []
@@ -1570,7 +1571,7 @@ def segmented_download(url, output_file, num_segments=4):
             part_file = Path(f'{output_file}.part{i}')
             with open(part_file, 'rb') as infile:
                 outfile.write(infile.read())
-            part_file.unlink()  # Delete part file using pathlib
+            part_file.unlink()  # Remove temporary segment file
 ```
 
 ### 11.3 Caching
