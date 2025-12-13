@@ -558,18 +558,17 @@ def extract_video_urls(album_url):
     if not album_url.startswith('https://www.erome.com/a/'):
         raise ValueError('Invalid Erome album URL')
     
-    # Step 2: Fetch page content
-    USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    # Step 2: Fetch page content (using global USER_AGENT constant)
     response = requests.get(album_url, headers={'User-Agent': USER_AGENT})
     html_content = response.text
     
-    # Step 2: Parse HTML
+    # Step 3: Parse HTML
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(html_content, 'html.parser')
     
     video_urls = []
     
-    # Step 3: Find video elements
+    # Step 4: Find video elements
     for video in soup.find_all('video'):
         # Check source tag
         source = video.find('source')
@@ -580,7 +579,7 @@ def extract_video_urls(album_url):
         if video.get('data-src'):
             video_urls.append(video['data-src'])
     
-    # Step 4: Filter and validate
+    # Step 5: Filter and validate
     video_urls = [url for url in video_urls if url.endswith('.mp4')]
     video_urls = list(set(video_urls))  # Remove duplicates
     
@@ -606,8 +605,10 @@ def download_video(video_url, output_path, chunk_size=1024*1024):
         output_path: Destination file path
         chunk_size: Download chunk size in bytes (default 1MB)
     """
+    # Standard headers with full User-Agent
+    USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'User-Agent': USER_AGENT,
         'Referer': 'https://www.erome.com/'
     }
     
@@ -1755,7 +1756,7 @@ class EromeDownloader:
         """Create configured requests session."""
         session = requests.Session()
         session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'Referer': 'https://www.erome.com/'
         })
         return session
