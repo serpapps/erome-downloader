@@ -135,19 +135,19 @@ Start here: [https://serp.ly/erome-video-downloader](https://serp.ly/erome-video
 
 ## FAQ
 
-**Can I download both videos and images from EroMe?**  
+**Can I download both videos and images from EroMe**  
 Yes. Supported album pages can expose both media types through the extension.
 
-**What file format do videos use?**  
+**What file format do videos use**  
 Supported videos are exported as MP4 files.
 
-**Do images stay in their original format?**  
+**Do images stay in their original format**  
 Where supported, images are saved in the original format exposed by the page.
 
-**Where are files saved?**  
+**Where are files saved**  
 They are saved to your default Downloads location, typically inside an EROME subfolder.
 
-**Do I need extra software?**  
+**Do I need extra software**  
 No. Everything runs through the browser extension.
 
 ## Notes
