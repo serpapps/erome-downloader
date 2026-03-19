@@ -20,7 +20,7 @@ EroMe Downloader is a browser extension for users who want a cleaner way to save
 
 ## Preview
 
-![EroMe Downloader workflow preview](assets/workflow-preview.svg)
+![EroMe Downloader workflow preview](assets/workflow-preview.webp)
 
 ## Table of Contents
 
