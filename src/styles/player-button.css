@@ -1,0 +1,71 @@
+/* Download button overlay for Erome player */
+.yp-download-button {
+  /* Force overlay-like button within player; avoid site overrides */
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 100 !important; /* Below popup/download manager (10000) */
+  background: #ec567c;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  width: auto !important;
+  height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  white-space: nowrap !important;
+  flex: 0 0 auto !important;
+  box-sizing: border-box;
+  pointer-events: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+.yp-download-button:hover { background: #d94567; }
+.yp-download-button:active { transform: translateY(1px); }
+.yp-dl-icon { font-size: 14px; line-height: 1; }
+.yp-dl-text { line-height: 1; }
+
+/* Popover */
+.yp-quality-popover {
+  position: absolute;
+  min-width: 170px;
+  max-width: 240px;
+  background: #1e1e1e;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+  overflow: hidden;
+}
+.yp-popover-header {
+  font-weight: 600;
+  font-size: 12px;
+  padding: 8px 10px;
+  background: #2a2a2a;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.yp-popover-content { padding: 6px; }
+.yp-popover-loading, .yp-popover-error { font-size: 12px; color: #ddd; padding: 8px; }
+.yp-popover-list { display: flex; flex-direction: column; gap: 4px; }
+.yp-popover-item {
+  appearance: none;
+  border: none;
+  background: #2c2c2c;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+.yp-popover-item:hover { background: #3a3a3a; }
+.yp-popover-q { font-weight: 600; }
+.yp-popover-type { font-size: 11px; opacity: 0.85; }
